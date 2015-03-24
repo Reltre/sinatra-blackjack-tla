@@ -34,3 +34,5 @@ PAGE 4
 -Displays thanks for playing.  
 -Have a link that allows the player to go to the start of the game(input name)
  if they want to do so.
+
+ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

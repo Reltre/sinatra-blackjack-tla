@@ -1,0 +1,7 @@
+<h4>Hi <%= session[:username] %>!</h4>
+
+<img src=<%= "images/cards/" + session[:dealer_hand][0].join('_') + ".jpg" %> > 
+<img src=<%= "images/cards/" + session[:dealer_hand][1].join('_') + ".jpg" %> > 
+<br><br>
+<img src=<%= "images/cards/" + session[:player_hand][0].join('_') + ".jpg" %> > 
+<img src=<%= "images/cards/" + session[:player_hand][1].join('_') + ".jpg" %> > 
