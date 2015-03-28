@@ -1,5 +1,5 @@
-<form action = '/game' method = 'post'>  
-  <h5><%= "Hello #{session[:username]}, please place your bet." %></h5>
+<form action = '/bet' method = 'post'>  
+  <h5><%= "Hello #{session[:player_name]}, please place your bet." %></h5>
   <br>
   <h5><%= "You currently have $#{session[:money]}." %></h5>
   <br>

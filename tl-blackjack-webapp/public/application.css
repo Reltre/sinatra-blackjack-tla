@@ -1,0 +1,14 @@
+form#hit_form {
+  margin-right :10px;
+  float :left;
+}
+
+form#stay_form {
+  margin-right :10px;
+  margin-left :80px;
+}
+
+form#dealer_hit {
+  float :left;
+}
+

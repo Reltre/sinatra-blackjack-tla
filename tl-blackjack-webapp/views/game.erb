@@ -1,7 +1,55 @@
-<h4>Hi <%= session[:username] %>!</h4>
 
-<img src=<%= "images/cards/" + session[:dealer_hand][0].join('_') + ".jpg" %> > 
-<img src=<%= "images/cards/" + session[:dealer_hand][1].join('_') + ".jpg" %> > 
-<br><br>
-<img src=<%= "images/cards/" + session[:player_hand][0].join('_') + ".jpg" %> > 
-<img src=<%= "images/cards/" + session[:player_hand][1].join('_') + ".jpg" %> > 
+<div class="well">
+<h4>Dealer's cards:</h4>
+  <% session[:dealer_hand].each_with_index do |card,idx| %>
+    <% if @show_card_cover && idx == 0%>
+      <img src="/images/cards/cover.jpg" align="middle" stylewidth:"162px;height:235" hspace="5">
+    <% else %>  
+      <%= card_image(card) %>
+    <% end %>
+  <% end %>
+  <% if @dealer_turn %>
+    <br/>
+    <form action="/game/dealer-turn" method="post" id="dealer_hit">
+      <button class="btn btn-large btn-primary pull-up pull-right" type="submit">Add card to Dealer's hand?</button>
+    </form>
+    <p>
+      <strong class="pull-right">
+        The Dealer's total is 
+        <%= calculate_total(session[:dealer_hand]) %>
+      </strong>
+    </p>
+  <% end %>
+</div>
+
+
+
+<div class="well">
+<h4><%= "#{session[:player_name]}'s cards:" %></h4>
+  <% session[:player_hand].each do |card| %>
+    <%= card_image(card) %>
+  <% end %>
+</div>
+
+<div class="pull-right">
+  <% if @show_hit_or_stay %>
+    <strong>
+      Your total is <%= calculate_total(session[:player_hand]) %>
+      What would you like to do? 
+    </strong>
+  <% end %>
+  <p class="muted">
+    <%= "#{session[:player_name]} has $#{session[:money]} and the   bet this round is $#{session[:bet]}." %>
+  </p>
+</div>
+
+<% if @show_hit_or_stay %>
+  <form id="hit_form" action="/game/player/hit" method="post">
+    <button class="btn btn-large btn-primary" type="submit">Hit</button>
+  </form>
+  <form id="stay_form" action="/game/player/stay" method="post">
+    <button class="btn btn-large btn-inverse" type="submit">Stay</button>
+  </form>
+<% end %>
+
+
