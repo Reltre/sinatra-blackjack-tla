@@ -12,6 +12,9 @@
         <div class="container">
             <ul class="nav">
               <li><a href="/new_player">Start Over</a></li>
+              <% if @error || @alert || @success %> 
+                <li><a href="/bet">Another Round?</a></li>
+              <% end %>   
             </ul>
         </div>
       </div>
@@ -20,8 +23,10 @@
   <div class="container">
     <%if @error %>
       <div class="alert alert-error"><%=@error%></div>
-    <%elsif @stay %>
-      <div class="alert alert-info"><%=@stay%></div>
+    <%elsif @info %>
+      <div class="alert alert-info"><%=@info%></div>
+    <%elsif @alert %>
+      <div class="alert alert-block"><%=@alert%></div>
     <%elsif @success %>
       <div class="alert alert-success"><%=@success%></div>
     <% end %>

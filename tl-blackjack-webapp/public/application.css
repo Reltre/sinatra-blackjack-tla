@@ -1,14 +1,17 @@
-form#hit_form {
-  margin-right :10px;
+#hit_form {
+  margin: 10px 10px 0px 0px;
   float :left;
 }
 
-form#stay_form {
-  margin-right :10px;
-  margin-left :80px;
+#stay_form {
+  margin: 10px 10px 0px 80px;
 }
 
-form#dealer_hit {
+#dealer_hit {
   float :left;
+  margin-top :50px;
 }
 
+.well {
+  margin: 50px 0px 0px 0px;
+}

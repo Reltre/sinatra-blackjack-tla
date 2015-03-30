@@ -1,47 +1,62 @@
 
 <div class="well">
-<h4>Dealer's cards:</h4>
+  <h4>Dealer's cards:</h4>
   <% session[:dealer_hand].each_with_index do |card,idx| %>
-    <% if @show_card_cover && idx == 0%>
+    <% if @show_card_cover && idx == 0 %>
       <img src="/images/cards/cover.jpg" align="middle" stylewidth:"162px;height:235" hspace="5">
     <% else %>  
       <%= card_image(card) %>
     <% end %>
   <% end %>
-  <% if @dealer_turn %>
-    <br/>
-    <form action="/game/dealer-turn" method="post" id="dealer_hit">
-      <button class="btn btn-large btn-primary pull-up pull-right" type="submit">Add card to Dealer's hand?</button>
-    </form>
-    <p>
-      <strong class="pull-right">
-        The Dealer's total is 
-        <%= calculate_total(session[:dealer_hand]) %>
-      </strong>
-    </p>
-  <% end %>
 </div>
 
+<% if @show_total %>
+  <p>
+    <strong class="pull-right" id="dealer_total">
+      The Dealer's total is 
+      <%= calculate_total(session[:dealer_hand]) %>.
+    </strong>
+  </p>
+<% end %>
+
+
+
+<% if @dealer_turn %>
+  <form action="/game/dealer/hit" method="post">
+    <button class="btn btn-large btn-primary" type="submit">
+      Add a Card to the Dealer's hand?
+    </button>
+  </form>
+<% end %>
 
 
 <div class="well">
-<h4><%= "#{session[:player_name]}'s cards:" %></h4>
+  <h4><%= "#{session[:player_name]}'s cards:" %></h4>
   <% session[:player_hand].each do |card| %>
     <%= card_image(card) %>
   <% end %>
 </div>
 
 <div class="pull-right">
-  <% if @show_hit_or_stay %>
+  <% if @show_only_player_total %>
+     <strong>
+      <%="#{session[:player_name]}'s total is #{calculate_total(session[:player_hand])}." %>
+     </strong>
+  <% else %>
     <strong>
-      Your total is <%= calculate_total(session[:player_hand]) %>
+      <%= "#{session[:player_name]}'s total is 
+      #{calculate_total(session[:player_hand])}." %>
       What would you like to do? 
     </strong>
   <% end %>
+
   <p class="muted">
     <%= "#{session[:player_name]} has $#{session[:money]} and the   bet this round is $#{session[:bet]}." %>
   </p>
 </div>
+
+<% session[:money] += session[:bet] if @success %>
+<% session[:money] -= session[:bet] if @error %>
 
 <% if @show_hit_or_stay %>
   <form id="hit_form" action="/game/player/hit" method="post">
