@@ -15,3 +15,8 @@
 .well {
   margin: 50px 0px 0px 0px;
 }
+
+#game_end {
+  text-align: center;
+  margin-top: 200px;
+}

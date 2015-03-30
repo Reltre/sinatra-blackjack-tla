@@ -79,12 +79,11 @@ before '/game/comparison' do
 end
 
 get '/' do
-  # if session[:player_name]
-  #   redirect 'game'
-  # else
-    session[:message] = nil
-    redirect 'new_player'
-  # end
+  if session[:player_name]
+    redirect '/bet'
+  else
+    redirect '/new_player'
+  end
 end
 
 get '/new_player' do
@@ -98,7 +97,7 @@ post '/new_player' do
   end
   session[:player_name] = params[:player_name]
   session[:money] = 500
-  redirect 'bet' 
+  redirect '/bet' 
 end
 
 get '/bet' do 
@@ -107,7 +106,7 @@ end
 
 post '/bet' do
   session[:bet] = params[:bet].to_i  
-  redirect'game'
+  redirect '/game'
 end
 
 get '/game' do
@@ -123,8 +122,14 @@ get '/game' do
   erb :game
 end
 
+
+
 post '/game/player/hit' do
   session[:player_hand] << session[:deck].pop   
+  redirect '/game/player'
+end
+
+get '/game/player' do 
   if calculate_total(session[:player_hand]) > 21
     @error = 
     "Sorry,#{session[:player_name]}
@@ -134,7 +139,7 @@ post '/game/player/hit' do
     @round_over = true
     halt erb(:game)
   end
-erb :game
+  erb :game
 end
 
 post '/game/player/stay' do
@@ -142,17 +147,14 @@ post '/game/player/stay' do
 end
 
 get '/game/dealer' do
-  @info = "You decided to stay."
-  dealer_total = calculate_total(session[:dealer_hand])
-
   @dealer_turn = true  
-  @show_total = true
+  @info = "You decided to stay"
   @show_only_player_total = true
-  @show_hit_or_stay = false
-  
+  dealer_total = calculate_total(session[:dealer_hand])
+ 
   if dealer_total > 21
     @success = "The Dealer has busted, #{session[:player_name]} wins!"
-    @show_card_cover = false
+    @dealer_turn = false
     halt erb(:game)
   elsif dealer_total >= 17 && dealer_total <= 21 || @blackjack
     redirect '/game/comparison'
@@ -163,7 +165,7 @@ end
 
 post '/game/dealer/hit' do
   session[:dealer_hand] << session[:deck].pop
-  redirect back
+  redirect '/game/dealer'
 end
 
 get '/game/comparison' do
@@ -174,6 +176,7 @@ get '/game/comparison' do
   @success = "#{session[:player_name]} wins!" if result == "win"
   @alert = "The round ended in a tie." if result == "tie"
   @error = "The Dealer won the round." if result == "loss"
+  @show_only_player_total = true
 
   if result == "blackjack_win"
     @success = "#{session[:player_name]} has BlackJack and wins!"
@@ -183,11 +186,13 @@ get '/game/comparison' do
     @error = "The Dealer has BlackJack and wins the round." 
   end
   
-  @show_only_player_total = true
   erb :game
 end
 
-# get '/dealer_turn' do 
-#    erb :game
-   
-# end 
+get '/end-game' do
+  if session[:player_name]
+    erb :game_over
+  else
+   redirect '/'
+  end
+end

@@ -19,8 +19,6 @@
   </p>
 <% end %>
 
-
-
 <% if @dealer_turn %>
   <form action="/game/dealer/hit" method="post">
     <button class="btn btn-large btn-primary" type="submit">
@@ -28,7 +26,6 @@
     </button>
   </form>
 <% end %>
-
 
 <div class="well">
   <h4><%= "#{session[:player_name]}'s cards:" %></h4>
@@ -51,7 +48,7 @@
   <% end %>
 
   <p class="muted">
-    <%= "#{session[:player_name]} has $#{session[:money]} and the   bet this round is $#{session[:bet]}." %>
+    <%= "#{session[:player_name]} has $#{session[:money]} and the bet this round is $#{session[:bet]}." %>
   </p>
 </div>
 
