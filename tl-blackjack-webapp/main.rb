@@ -24,11 +24,10 @@ helpers do
   end
 
   def card_image(card)
-    "<img src=/images/cards/#{card.join('_')}.jpg  
-    align=\'middle\' style=\'width:162px;height:235px\' hspace=\'5\'>"
+    "<img src=/images/cards/#{card.join('_')}.jpg>"
   end
 
-  def compare
+  def compare_hands
     dealer_total = calculate_total(session[:dealer_hand])
     player_total = calculate_total(session[:player_hand])
 
@@ -36,7 +35,7 @@ helpers do
       "tie"
     elsif dealer_total > player_total
       "loss"
-    else player_total > dealer_total
+    else 
       "win"
     end
   end
@@ -63,19 +62,6 @@ end
 before do
   @show_hit_or_stay = true
   @show_card_cover = true
-end
-
-before '/game/dealer' do
-  @show_card_cover = false
-  @show_hit_or_stay = false
-  @show_total = true
-end 
-
-before '/game/comparison' do
-  @show_card_cover = false
-  @show_hit_or_stay = false
-  @dealer_turn = false
-  @show_total = true
 end
 
 get '/' do
@@ -147,6 +133,9 @@ post '/game/player/stay' do
 end
 
 get '/game/dealer' do
+  @show_card_cover = false
+  @show_hit_or_stay = false
+  @show_dealer_total = true
   @dealer_turn = true  
   @info = "You decided to stay"
   @show_only_player_total = true
@@ -170,8 +159,15 @@ end
 
 get '/game/comparison' do
   result = 
-  (blackjack?(session[:dealer_hand]) || blackjack?(session[:player_hand])) ?
-  compare_blackjack : compare
+  if (blackjack?(session[:dealer_hand]) || blackjack?(session[:player_hand]))
+    compare_blackjack
+  else
+    compare_hands
+  end
+  @show_card_cover = false
+  @show_hit_or_stay = false
+  @dealer_turn = false
+  @show_dealer_total = true
 
   @success = "#{session[:player_name]} wins!" if result == "win"
   @alert = "The round ended in a tie." if result == "tie"

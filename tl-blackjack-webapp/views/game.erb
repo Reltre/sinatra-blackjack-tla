@@ -3,14 +3,14 @@
   <h4>Dealer's cards:</h4>
   <% session[:dealer_hand].each_with_index do |card,idx| %>
     <% if @show_card_cover && idx == 0 %>
-      <img src="/images/cards/cover.jpg" align="middle" stylewidth:"162px;height:235" hspace="5">
+      <img src="/images/cards/cover.jpg">
     <% else %>  
       <%= card_image(card) %>
     <% end %>
   <% end %>
 </div>
 
-<% if @show_total %>
+<% if @show_dealer_total %>
   <p>
     <strong class="pull-right" id="dealer_total">
       The Dealer's total is 
